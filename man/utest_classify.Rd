@@ -18,11 +18,15 @@ The last column must be the group factor with only two groups.}
 \eqn{1000 < bootstrap_iter < 10000}.}
 }
 \value{
-p-value based on bootstraps.
+A list with class "utest_classify" containing the following components:
+    \item{statistic}{the value of the test statistic.}
+    \item{p_value}{The p-value for the test.}
+    \item{groups}{the levels that identify the groups in the data.}
+    \item{bootstrap_iter}{the number of bootstrap iterations.}
 }
 \description{
-The null hypotheses is that the new data is not well classified in the first group and the
-alternative hypotheses is that the data is well classified in the first group.
+The null hypothesis is that the new data is not well classified into the first group and the
+alternative hypothesis is that the data is well classified into the first group.
 }
 \examples{
 # Example 1
@@ -32,7 +36,7 @@ data <- data.frame(t(x))
 data['group'] <- factor(rep(c('group1', 'group2'), each = 5))
 # Test data comes from G1.
 x <- rnorm(60, 0)
-# The test correctly indicates that the test data should be classified in G1 (p < 0.05).
+# The test correctly indicates that the test data should be classified into G1 (p < 0.05).
 utest_classify(x, data, groups = c("group1", "group2"))
 
 # Example 2
@@ -42,6 +46,6 @@ data <- data.frame(t(x))
 data['group'] <- factor(rep(c('group1', 'group2'), each = 5))
 # Test data comes from G2.
 x <- rnorm(60, 10)
-# The test correctly indicates that the test data should be classified in G2 (p > 0.05).
+# The test correctly indicates that the test data should be classified into G2 (p > 0.05).
 utest_classify(x, data, groups = c("group1", "group2"))
 }

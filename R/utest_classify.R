@@ -1,7 +1,7 @@
 #' Test for classification in one of two groups.
 #'
-#' The null hypotheses is that the new data is not well classified in the first group and the
-#' alternative hypotheses is that the data is well classified in the first group.
+#' The null hypothesis is that the new data is not well classified into the first group and the
+#' alternative hypothesis is that the data is well classified into the first group.
 #'
 #' @param x A numeric vector to be classified.
 #' @param data A data.frame. Each row must be an observation and each column a dimension.
@@ -9,7 +9,11 @@
 #' @param groups A factor or character vector. It must contain only two elements: the first and second group names, respectively.
 #' @param bootstrap_iter Numeric scalar. The number of bootstraps. It's recommended
 #'   \eqn{1000 < bootstrap_iter < 10000}.
-#' @return p-value based on bootstraps.
+#' @return A list with class "utest_classify" containing the following components:
+#'     \item{statistic}{the value of the test statistic.}
+#'     \item{p_value}{The p-value for the test.}
+#'     \item{groups}{the levels that identify the groups in the data.}
+#'     \item{bootstrap_iter}{the number of bootstrap iterations.}
 #' @examples
 #' # Example 1
 #' # Five observations from each group, G1 and G2. Each observation has 60 dimensions.
@@ -18,7 +22,7 @@
 #' data['group'] <- factor(rep(c('group1', 'group2'), each = 5))
 #' # Test data comes from G1.
 #' x <- rnorm(60, 0)
-#' # The test correctly indicates that the test data should be classified in G1 (p < 0.05).
+#' # The test correctly indicates that the test data should be classified into G1 (p < 0.05).
 #' utest_classify(x, data, groups = c("group1", "group2"))
 #'
 #' # Example 2
@@ -28,7 +32,7 @@
 #' data['group'] <- factor(rep(c('group1', 'group2'), each = 5))
 #' # Test data comes from G2.
 #' x <- rnorm(60, 10)
-#' # The test correctly indicates that the test data should be classified in G2 (p > 0.05).
+#' # The test correctly indicates that the test data should be classified into G2 (p > 0.05).
 #' utest_classify(x, data, groups = c("group1", "group2"))
 #' @export
 utest_classify <- function(x, data, groups, bootstrap_iter = 1000)
@@ -60,7 +64,8 @@ utest_classify <- function(x, data, groups, bootstrap_iter = 1000)
         B[i] <- B1 - B2
     }
 
-    utest_classify_obj <- list(p_value = mean(B > D),
+    utest_classify_obj <- list(test_statistic = D,
+                               p_value = mean(B > D),
                                groups = groups,
                                bootstrap_iter = bootstrap_iter)
 
@@ -73,11 +78,22 @@ utest_classify <- function(x, data, groups, bootstrap_iter = 1000)
 #' @export
 print.utest_classify <- function(obj, ...) {
     cat("\n")
-    cat("U test for classification\n\n")
-    cat("p-value:", obj$p_value, "\n")
-    cat("Groups:", obj$groups, "\n")
+    cat("\tU test for classification\n\n")
+    cat("Test statistic:", obj$test_statistic, "\n")
+    cat("p-value:", obj$p_value, (.level_symbol(obj$p_value)), "\n")
+    cat("Alternative hypothesis: it should be classified into the first group\n")
+    cat("First group:", obj$groups[1], ", second group:", obj$groups[2], "\n")
     cat("Bootstrap iterations:", obj$bootstrap_iter, "\n")
+    cat("---\n")
+    cat("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n")
     cat("\n")
 
     invisible(obj)
+}
+
+.level_symbol <- function(p_value) {
+    symbols <- c("***", "**", "*", ".", "")
+    sig_levels <- c(0.001, 0.01, 0.05, 0.1, 1)
+
+    return(symbols[which.max(p_value < sig_levels)])
 }
