@@ -14,14 +14,14 @@ The last column must be the group factor with only two groups.}
 
 \item{groups}{A factor or character vector. It must contain only two elements: the first and second group names, respectively.}
 
-\item{numB}{Numeric scalar. The number of bootstraps. It's recommended 
-\eqn{1000 < numB < 10000}.}
+\item{bootstrap_iter}{Numeric scalar. The number of bootstraps. It's recommended
+\eqn{1000 < bootstrap_iter < 10000}.}
 }
 \value{
 p-value based on bootstraps.
 }
 \description{
-The null hypotheses is that the new data is not well classified in the first group and the 
+The null hypotheses is that the new data is not well classified in the first group and the
 alternative hypotheses is that the data is well classified in the first group.
 }
 \examples{
