@@ -18,3 +18,6 @@ A value for the statistic \code{Bn}.
 \description{
 A measure of distances between and within groups.
 }
+\details{
+It now allows for single element groups.
+}
