@@ -24,31 +24,21 @@ optimBn <- function(mdm, itmax = 200, centers = -1, standardized = FALSE,
     Fobj  vector()
 
     # Compute the smile function.
-    Cn <- vector()
     varBn <- vector()
     numB <- 2000
 
     if (standardized && is.null(bootB1)) {
+        # TODO: replace boot_sigam1().
         bootB1 <- boot_sigma1(c(1, (n - 1)), md)
     }
 
     # Return the variance of Bn with group size c(floor(n/2), (n-floor(n/2)).
     if (is.null(bootB)) {
-        bootB <- boot_sigma(c(floor(n / 2), (n - floor(n / 2))), numB, md)
+        bootB <- boot_sigma(c(floor(n / 2), (n - floor(n / 2))), md, numB)
     }
 
-    if (!standardized) {
-        # TODO: it should not be calculated if standardized is TRUE?
-        # Cn[1] and C[n-1] are the same.
-        Cn[1] <- Cn[n-1] <- (1) / ((n - 2) * n * (n - 1))
-    }
-
-    # The others must be calculated.
-    for (n1 in 2:(n-2)) {
-        # TODO: We can optimize it.
-        n2 <- n - n1
-        Cn[n1] <- (((n1 * n2) / (n * (n - 1)) ^ 2) * (2 * n ^ 2 - 6 * n + 4) / ((n1 - 1) * (n2 - 1)))
-    }
+    # TODO: Cn[1] and Cn[n-1] should be calculated if standardized is TRUE?
+    Cn <- smile(n)
 
     for (n1 in 1:(n-1)) {
         # TODO: We can also optimize it.
