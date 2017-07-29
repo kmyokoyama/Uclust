@@ -3,10 +3,13 @@
 #' @param mdm Numeric vector.
 #' @param itmax Numeric scalar. The maximum number of iterations.
 #' @param centers Numeric scalar. The number of centers.
-#' @param bootB Numeric scalar. The number of bootstrap iterations.
+#' @param standardized Logical. Should it be standardized?
+#' @param bootB Numeric scalar. The bootstrap variance of Bn.
+#' @param bootB1 Numeric scalar. The bootstrap variance of Bn.
 #' @return The group to which the objective function based on standardized
 #'   \code{Bn} had been converged to a minimum.
-optimBn <- function(mdm, itmax = 200, centers = -1, bootB = -1) {
+optimBn <- function(mdm, itmax = 200, centers = -1, standardized = FALSE,
+                    bootB = NULL, bootB1 = NULL) {
     # Distance matrix.
     md <- mdm
     # Number of series.
@@ -24,13 +27,21 @@ optimBn <- function(mdm, itmax = 200, centers = -1, bootB = -1) {
     Cn <- vector()
     varBn <- vector()
     numB <- 2000
+
+    if (standardized && is.null(bootB1)) {
+        bootB1 <- boot_sigma1(c(1, (n - 1)), md)
+    }
+
     # Return the variance of Bn with group size c(floor(n/2), (n-floor(n/2)).
-    if (bootB == -1) {
+    if (is.null(bootB)) {
         bootB <- boot_sigma(c(floor(n / 2), (n - floor(n / 2))), numB, md)
     }
 
-    # Cn[1] and C[n-1] are the same.
-    Cn[1] <- Cn[n-1] <- (1) / ((n - 2) * n * (n - 1))
+    if (!standardized) {
+        # TODO: it should not be calculated if standardized is TRUE?
+        # Cn[1] and C[n-1] are the same.
+        Cn[1] <- Cn[n-1] <- (1) / ((n - 2) * n * (n - 1))
+    }
 
     # The others must be calculated.
     for (n1 in 2:(n-2)) {
@@ -43,6 +54,11 @@ optimBn <- function(mdm, itmax = 200, centers = -1, bootB = -1) {
         # TODO: We can also optimize it.
         n2 <- n - n1
         varBn[n1] <- Cn[n1] * bootB / Cn[floor(n / 2)]
+    }
+
+    if (standardized) {
+        varBn[1] <- bootB1
+        varBn[n - 1] <- bootB1
     }
 
     # Start optimization by initializing the parameters.
