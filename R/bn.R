@@ -113,3 +113,24 @@ boot_sigma <- function(ngv, md, sampling_method = "bootstrap", resampling_iter =
 
     return(varBboot)
 }
+
+# We need to merge it into boot_sigma function.
+# I'll keep it in separate by now.
+boot_sigma1 <- function(ngv, md)
+{
+    n <- sum(ngv)
+    B <- rep(0, n)
+    for(i in 1:n)
+    {
+        vaux1 <- i
+        vaux2 <- c(1:n)[-i]
+        vaux <- c(vaux1, vaux2)
+        mataux <- md[vaux, vaux]
+        B[i] <- Bn(c(1, n-1), mataux) # Bn.
+    }
+    a <- robcor::robacf(B, lag.max = 0, type = "covariance", plot = FALSE)
+
+    varBboot <- as.numeric(a$acf)
+
+    return(varBboot)
+}
