@@ -7,10 +7,11 @@
 Utest(ngv, numB, md)
 }
 \arguments{
-\item{ngv}{A numeric vector \code{c(n1, n2)} where \code{n1} is the number of elements in group 1 and
-\code{n2} is the number of elements in group 2.}
+\item{ngv}{A numeric vector \code{c(n1, n2)} where \code{n1} is the number of
+elements in group 1 and \code{n2} is the number of elements in group 2.}
 
-\item{numB}{Numeric scalar. The number of bootstraps. It's recommended \eqn{1000 < numB < 10000}.}
+\item{numB}{Numeric scalar. The number of bootstraps. It's recommended
+\eqn{1000 < numB < 10000}.}
 
 \item{md}{A n x n matrix of distances where \eqn{n = n1 + n2}.}
 }

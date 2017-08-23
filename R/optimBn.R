@@ -21,7 +21,7 @@ optimBn <- function(mdm, itmax = 200, centers = -1, standardized = FALSE,
     ass_old <- rep(2, n)
     # Keep track of the optimization procedure.
     ASS <- matrix(ncol = n, nrow = itmax)
-    Fobj  vector()
+    Fobj <- vector()
 
     # Compute the smile function.
     varBn <- vector()
