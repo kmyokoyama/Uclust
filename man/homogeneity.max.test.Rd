@@ -9,12 +9,14 @@ homogeneity.max.test(md, rep = 5)
 \arguments{
 \item{md}{A n x n matrix of distances where \eqn{n = n1 + n2}.}
 
-\item{rep}{Numeric scalar. The number of independent runs of the algorithm to take care of local maximum.}
+\item{rep}{Numeric scalar. The number of independent runs of the algorithm to
+take care of local maximum.}
 }
 \value{
 A list [needs improvement].
 }
 \description{
-Applies the maximum homogeneity test for the configuration of the max padronized \code{Bn}.
-Repeat the optimization algorithm \code{rep} times and chooses the maximum.
+Applies the maximum homogeneity test for the configuration of the max
+padronized \code{Bn}. Repeat the optimization algorithm \code{rep} times and
+chooses the maximum.
 }

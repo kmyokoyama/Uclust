@@ -2,21 +2,28 @@
 % Please edit documentation in R/optimBn.R
 \name{optimBn}
 \alias{optimBn}
-\title{Optimization of standardized \code{Bn}.}
+\title{Optimization of \code{Bn}.}
 \usage{
-optimBn(dados, itmax = 200, centers = -1)
+optimBn(mdm, itmax = 200, centers = -1, standardized = FALSE,
+  bootB = NULL, bootB1 = NULL)
 }
 \arguments{
-\item{dados}{Numeric vector.}
+\item{mdm}{Numeric vector.}
 
 \item{itmax}{Numeric scalar. The maximum number of iterations.}
 
 \item{centers}{Numeric scalar. The number of centers.}
+
+\item{standardized}{Logical. Should it be standardized?}
+
+\item{bootB}{Numeric scalar. The bootstrap variance of Bn.}
+
+\item{bootB1}{Numeric scalar. The bootstrap variance of Bn.}
 }
 \value{
-The group to which the objective function based on standardized \code{Bn}
-had been converged to a minimum.
+The group to which the objective function based on standardized
+  \code{Bn} had been converged to a minimum.
 }
 \description{
-Optimization of standardized \code{Bn}.
+Optimization of \code{Bn}.
 }

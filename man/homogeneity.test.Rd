@@ -9,13 +9,16 @@ homogeneity.test(md, numB)
 \arguments{
 \item{md}{A n x n matrix of distances where \eqn{n = n1 + n2}.}
 
-\item{numB}{Numeric scalar. The number of bootstraps. It's recommended \eqn{1000 < numB < 10000}.}
+\item{numB}{Numeric scalar. The number of bootstraps. It's recommended
+\eqn{1000 < numB < 10000}.}
 }
 \value{
-The smallest Utest's p-value of all (\eqn{(2^(n - 1) - n - 1)}) two-subgroups arrangement.
+The smallest Utest's p-value of all (\eqn{(2^(n - 1) - n - 1)})
+  two-subgroups arrangement.
 }
 \description{
-If the smallest p-value is greater than \code{alpha}, then the group is considered homogeneous.
+If the smallest p-value is greater than \code{alpha}, then the group is
+considered homogeneous.
 }
 \examples{
 # Here n = 11 and the group is not homogeneous.
