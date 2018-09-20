@@ -4,8 +4,9 @@
 # convergiu para um minimo
 
 #source("boot_sigma.R")
-#source("objBn.R")
-optimBn=function(mdm,itmax=200, centers=-1,bootB=-1){
+#source("boot_sigma1.R")
+#source("objstdBn.R")
+optimstdBn=function(mdm,itmax=200, centers=-1,bootB=-1,bootB1=-1){
   md=mdm # matriz de distancias
   #encontra as dimensoes
 
@@ -20,6 +21,37 @@ optimBn=function(mdm,itmax=200, centers=-1,bootB=-1){
   #Bn=vector()
   Fobj=vector()
 
+
+  #calcula a smaile function
+  Cn=vector()
+  varBn=vector()
+  numB=2000
+  # por enquanto mu4=2 (da normal) mu4=var((x-mu)^2)
+  #mu4=2
+  #Cn[1]=(1/(n*(n-1)))*L*mu4 + 1/(n*(n-1)*(n-2))*4*L
+  #Cn[n-1]=Cn[1]
+  if (bootB1==-1){
+    bootB1=boot_sigma1(c(1,(n-1)),md)
+  }
+
+
+  if(bootB==-1){
+     bootB=boot_sigma(c(floor(n/2),(n-floor(n/2))),numB,md) # retorna a variância do Bn com um esse c(floor(n/2),(n-floor(n/2)) tamamnho de grupo
+  }
+
+
+  for (n1 in 2:(n-2)){
+    n2=n-n1
+    Cn[n1]=(((n1*n2)/(n*(n-1))^2)*(2*n^2-6*n+4)/((n1-1)*(n2-1)))
+  }
+  varBn[1]=bootB1
+  varBn[n-1]=bootB1
+
+  for (n1 in 2:(n-2)){
+    n2=n-n1
+    varBn[n1]=Cn[n1]*bootB/Cn[floor(n/2)]
+  }
+  # plot(varBn)
 
 
   ### Comeca otimizacao inicializando os parametros
@@ -50,19 +82,19 @@ optimBn=function(mdm,itmax=200, centers=-1,bootB=-1){
     # centers[1,]=c(mean(dados[ass==FALSE,1]),mean(dados[ass==FALSE,2]))
     # centers[2,]=c(mean(dados[ass==TRUE,1]),mean(dados[ass==TRUE,2]))
 
-    ord=sample(n,n)
+    ord=sample(1:n)
     for (i in ord){
     #for(i in 1:n){
       ass[i]=0
-      f0= objBn(ass,md)
+      f0= objstdBn(ass,varBn,md)
       ass[i]=1
-      f1 = objBn(ass,md)
+      f1 = objstdBn(ass,varBn,md)
       if(f0 < f1){
         ass[i]=0
       }
     }
     #Bn[it]=Bn(dados,which(ass==ass[1]))            # registra o valor de Bn para cada iteracao
-    Fobj[it]= objBn(ass,md)
+    Fobj[it]= objstdBn(ass,varBn,md)
 
     it=it+1
     ASS[it,]=ass
@@ -73,8 +105,8 @@ optimBn=function(mdm,itmax=200, centers=-1,bootB=-1){
 
   #monta resposta
 
-  ans=list(which(ass==ass[1]),Fobj,it-1,ASS[1:(it+1),],bootB)
-  names(ans)=c("grupo1","Fobj", "numIt","history","bootB")
+  ans=list(which(ass==ass[1]),Fobj,it-1,ASS[1:(it+1),],varBn,bootB,bootB1)
+  names(ans)=c("grupo1","Fobj", "numIt","history","varBn","bootB","bootB1")
 
   #plot(dados,col=ass+1) # funciona para 2 D
 

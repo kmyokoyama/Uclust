@@ -1,8 +1,11 @@
 Package: Uclust
 Title: U-Statistics for Clustering and Classification
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Gabriela", "Cybis", email = "gcybis@yahoo.com.br", role = c("aut")),
+    person("Marcio", "Valk", email = "marciovalk@gmail.com", role = c("aut")),
+    person("Kazuki", "Yokoyama", email = "kmyokoyama@inf.ufrgs.br", role = c("cre")))
+Description: U-Statistics for Clustering and Classification.
 Imports: robcor
 Depends: R (>= 3.2.2)
 License: GPL-3
